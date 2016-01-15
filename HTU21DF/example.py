@@ -4,7 +4,7 @@ Testing the HTU21DF library.
 """
 
 import time
-import HTU21DF
+from HTU21DF import HTU21DF
 
 def main():
 	address = 0x40
@@ -13,19 +13,26 @@ def main():
 
 	htu = HTU21DF(address)
 
-	while True:
-		if htu.begin():
-			read_data(htu)
+	# start = htu.begin()
+	# print start
+	if htu.begin():
+		print "Success!!!"
+		while True:
+			#read_data(htu)
+			print htu.readTemperature()
+			time.sleep(0.5)
+	else:
+		print "The device is not running!!!"
+	
 		
-		time.sleep(0.5)
 
 def read_data(htu):
 	while True:	
 
-		print "The temperature is %f C." %(htu.read_temperature())
+		print "The temperature is %f C." %(htu.readTemperature())
 		time.sleep(1)
 		
-		print "The humidity is %F percent." %(htu.read_humidity())
+		print "The humidity is %F percent." %(htu.readHumidity())
 		time.sleep(1)
 
 

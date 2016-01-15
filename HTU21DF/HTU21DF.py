@@ -24,8 +24,10 @@ class HTU21DF:
 		self.reset()
 
 		register = self.i2c.readList(self.__HTU21DF_READREG, 1)
+		
+		time.sleep(0.2)
 
-		if register == 0x2:
+		if register[0] == 2:
 			return True
 		
 		return False
@@ -35,7 +37,9 @@ class HTU21DF:
 		Reset the module
 		"""
 		self.i2c.writeRaw8(self.__HTU21DF_RESET)
+
 		time.sleep(0.2)
+
 
 	def readTemperature(self):
 		""" 
@@ -45,16 +49,21 @@ class HTU21DF:
 		byteArray[0], byteArray[1]: Raw temperature data
 		byteArray[2] : CRC
 		"""
-    	byteArray = self.i2c.readList(self.__HTU21DF_READTEMP, 3)
+		# byteArray = [0]*6
+		# for i in range(len(data)):
+		# 	data[i] = self.i2c.readU8()
+			
 
-    	temp_reading = (byteArray[0] << 8) + byteArray[1]
-    	
-    	# Clear the status bits (maybe necessary)
+		byteArray = self.i2c.readList(self.__HTU21DF_READTEMP, 3)
+		print byteArray
+		temp_reading = (byteArray[0] << 8) + byteArray[1]
+
+		# Clear the status bits (maybe necessary)
 		#temp_reading = temp_reading & 0xFFFC;
 
 		temperature = ((temp_reading / 65536) * 175.72 ) - 46.85 # formula from datasheet
 
-    	return temperature
+		return temperature
 
 	def readHumidity(self):
 		"""
