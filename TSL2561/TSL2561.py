@@ -14,7 +14,7 @@ https://github.com/adafruit/Adafruit_TSL2561
 
 from __future__ import absolute_import
 import time
-from Adafruit_I2C import Adafruit_I2C
+from . import Adafruit_I2C
 from constants import *  # pylint: disable=unused-wildcard-import
 
 __author__ = 'Georges Toth <georges@trypill.org>'
