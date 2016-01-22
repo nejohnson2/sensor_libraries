@@ -6,7 +6,7 @@ from TSL2561 import TSL2561
 def main():
 	GPIO.setmode(GPIO.BCM)
 
-	sensor = BME280(mode=BME280_OSAMPLE_8)
+	sensor = BME280()
 	tsl = TSL2561()
 	shinyei = Shinyei(18)	# add pin number
 	    
