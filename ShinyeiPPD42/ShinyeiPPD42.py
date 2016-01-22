@@ -5,15 +5,18 @@ class Shinyei(object):
 
 	def __init__(self, pin):
 		self.pin = pin 			# pin for GPIO connection
-		self.lpo = 0			# duration of low pulses
-		self.start_ltime = 0	# initialize to zero to prevent start with low pulse
-		self._start()			# initialize GPIO pin
+		GPIO.setup(self.pin, GPIO.IN)
 		
 	def _start(self):
-		'''Setup the GPIO pins
-		with callback function'''
-		GPIO.setup(self.pin, GPIO.IN)
+		'''Set default values and 
+		attach event detection'''
+		self.lpo = 0				# duration of low pulses
+		self.start_ltime = 0		# initialize to zero to prevent start with low pulse
 		GPIO.add_event_detect(self.pin, GPIO.BOTH, self._get_lpo)
+
+	def _reset(self):
+		'''Remove event detection'''
+		GPIO.remove_event_detect(self.pin)	# prevents an interrupt during the rest of the code		
 
 	def _get_lpo(self, channel):
 		'''Callback function when pin 
@@ -27,32 +30,38 @@ class Shinyei(object):
 		else:
 			'''Reading went high'''
 			if self.start_ltime != 0:
-				self.lpo += current_time - self.start_ltime		# add time that was low
+				duration = current_time - self.start_ltime		# add time that was low
+				self.lpo += duration
 
 	def _calc_ratio(self, duration):
 		'''calculate ratio of low pulse time to total time'''
 		if self.lpo != 0:
-			self.ratio = float(self.lpo) / float(duration)		# calculate percentage of pulses being low
+			ratio = float(self.lpo) / float(duration)		# calculate percentage of pulses being low
 		else:
-			self.ratio = 0
+			ratio = 0
 
-	def _calc_concentration(self):
-		'''calculate datasheet formula'''
-		self.concentration = 1.1 * math.pow(self.ratio,3) - 3.8 * math.pow(self.ratio,2) + 520*self.ratio + 0.62
+		return ratio
+
+	def _calc_concentration(self, ratio):
+		'''calculate particles per 0.01 cubic feet'''
+		concentration = (1.1 * ratio**3) - (3.8 * ratio**2) + (520 * ratio) + 0.62
+
+		return concentration
 
 	def read(self, duration):
 		'''Output results every 30s
 		otherwise do nothing'''
+		self._start()
 		start_time = time.time()
 
 		while time.time() - start_time < duration:
-			time.sleep(1) # do nothing over duration time
+			pass			# do nothing 
 		else:
-			self._calc_ratio(duration)
-			self._calc_concentration()
-			self.results = [self.lpo, self.ratio, self.concentration]
-			self.lpo = 0
-			return self.results
+			r = self._calc_ratio(duration)
+			c = self._calc_concentration(r)
+
+			self._reset()	# remove event detect
+			return [self.lpo, r, c]
 		
 
 if __name__ == '__main__':
