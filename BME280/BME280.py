@@ -4,6 +4,9 @@
 # Based on the BMP280 driver with BME280 changes provided by
 # David J Taylor, Edinburgh (www.satsignal.eu)
 #
+# Furhter changes by Nicholas Johnson incorporate the Adafruit_I2C library
+# instead of the outdated Adafruit_GPIO library.
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -21,9 +24,9 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+
 from Adafruit_I2C import Adafruit_I2C
 import time
-
 
 # BME280 default address.
 BME280_I2CADDR = 0x77

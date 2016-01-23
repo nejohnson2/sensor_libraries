@@ -5,6 +5,7 @@ from ShinyeiPPD42 import Shinyei
 from TSL2561 import TSL2561
 
 def write_csv(data):
+	'''Write data to a csv file'''
 	fname = './data.csv'
 
 	with open(fname, 'a') as f:
@@ -14,25 +15,24 @@ def write_csv(data):
 	f.close()
 
 def main():
-	GPIO.setmode(GPIO.BCM)
+	'''Main program loop'''
 	
-	bme = BME280()			# initialize bme280
-	tsl = TSL2561()			# initialize tsl2561
-	shinyei = Shinyei(18)	# initialize shinyei on gpio pin
+	# Initialize sensors
+	bme = BME280()
+	tsl = TSL2561()
+	shinyei = Shinyei(18)
 	    
 	while True:    
-		aq = shinyei.read(30)				# I believe this is a blocking module
+		# Read data from the shinyei sensor.  I believe
+		# this is a blocking module so the loop will only 
+		# not run while the shinyei is reading.
+		aq = shinyei.read(30)				
 
-		degrees = bme.read_temperature()
-		pascals = bme.read_pressure()
-		hectopascals = pascals / 100
-		humidity = bme.read_humidity()
-		lux = tsl.lux()
-
+		# Read the rest of the sensors
 		data = {
 			'Time' : time.time(),
 			'Temp' : bme.read_pressure(),
-			'Pressure' : bme.read_pressure() / 100,
+			'Pressure' : bme.read_pressure() / 100, # divide by 100 to get hetopascals hPa
 			'Humidity' : bme.read_humidity(),
 			'Lux' : tsl.lux(),
 			'LPO' : aq[0],
@@ -40,9 +40,11 @@ def main():
 			'Concentration' : aq[2],
 		}
 
+		# write data to csv
 		write_csv(data)
 		print data
 
 if __name__ == '__main__':
+	GPIO.setmode(GPIO.BCM)
 	main()
 	GPIO.cleanup()	    

@@ -1,17 +1,3 @@
-#!/usr/bin/env python
-'''Driver for the TSL2561 digital luminosity (light) sensors.
-
-Pick one up at http://www.adafruit.com/products/439
-
-Adafruit invests time and resources providing this open source code,
-please support Adafruit and open-source hardware by purchasing
-products from Adafruit!
-
-Code ported from Adafruit Arduino library,
-commit ced9f731da5095988cd66158562c2fde659e0510:
-https://github.com/adafruit/Adafruit_TSL2561
-'''
-
 from __future__ import absolute_import
 import time
 from .Adafruit_I2C import Adafruit_I2C
