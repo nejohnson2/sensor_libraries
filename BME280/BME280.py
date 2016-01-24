@@ -4,8 +4,9 @@
 # Based on the BMP280 driver with BME280 changes provided by
 # David J Taylor, Edinburgh (www.satsignal.eu)
 #
-# Furhter changes by Nicholas Johnson incorporate the Adafruit_I2C library
-# instead of the outdated Adafruit_GPIO library.
+# Further changes made by Nicholas Johnson to incorporate the Adafruit_I2C library
+# instead of the outdated Adafruit_GPIO library.  Since changes are minor, the 
+# original copyright remains.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
