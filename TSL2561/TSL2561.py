@@ -1,7 +1,6 @@
-from __future__ import absolute_import
+from Adafruit_I2C import Adafruit_I2C
+from constants import *  # pylint: disable=unused-wildcard-import
 import time
-from .Adafruit_I2C import Adafruit_I2C
-from .constants import *  # pylint: disable=unused-wildcard-import
 
 __author__ = 'Georges Toth <georges@trypill.org>'
 __credits__ = ['K.Townsend (Adafruit Industries)']
@@ -283,5 +282,6 @@ class TSL2561(object):
 
 if __name__ == "__main__":
     tsl = TSL2561(debug=True)
-
-    print tsl.lux()
+    while True:
+        print tsl.lux()
+        time.sleep(5)
