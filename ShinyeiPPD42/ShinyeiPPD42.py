@@ -94,6 +94,11 @@ class Shinyei(object):
 			self._reset()	# remove event detect
 			return [self.lpo, r, c]
 		
+	def __del__(self):
+		try:
+			GPIO.cleanup()
+		except:
+			pass			
 
 if __name__ == '__main__':
 	GPIO.setmode(GPIO.BCM)

@@ -13,12 +13,13 @@ v2.0 - Rewrote driver for Adafruit_Sensor and Auto-Gain support, and
 v1.0 - First release (previously TSL2561)
 '''
 
-
 class TSL2561(object):
     '''Driver for the TSL2561 digital luminosity (light) sensors.'''
+
     def __init__(self, address=None,
                  integration_time=TSL2561_DELAY_INTTIME_402MS,
                  gain=TSL2561_GAIN_1X, autogain=False, debug=False):
+        
         if address is not None:
             self.address = address
         else:
@@ -37,10 +38,10 @@ class TSL2561(object):
         '''Initializes I2C and configures the sensor (call this function before
         doing anything else)
         '''
-        # Make sure we're actually connected
+        # Make sure we're actually connected        
         x = self.i2c.readU8(TSL2561_REGISTER_ID)
-
-        if not x & 0x0A:
+        
+        if x == -1:
             raise Exception('TSL2561 not found!')
         ##########
 

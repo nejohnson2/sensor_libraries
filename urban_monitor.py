@@ -32,7 +32,7 @@ from ShinyeiPPD42 import Shinyei
 from TSL2561 import TSL2561
 
 __author__ = "Nicholas Johnson <nejohnson2@gmail.com>"
-__copyright__ = "Copyright (C) 2004 Nicholas Johnson"
+__copyright__ = "Copyright (C) 2016 Nicholas Johnson"
 __license__ = "MIT"
 __version__ = "v1.0"
 
@@ -50,25 +50,8 @@ def write_csv(data):
 
 	f.close()
 
-def main():
-	'''Main program loop'''
-	
-	# Initialize sensors
-	try:
-		bme = BME280()
-	except:
-		print "Failed to load the BME280 sensor"
-		exit()
-	try:
-		tsl = TSL2561()
-	except:
-		print "Failed to load the TSL2561 sensor"
-		exit()
-	try:
-		shinyei = Shinyei(18)
-	except:
-		print "Failed to initialize the Shinyei sensor"
-		exit()
+def main(bme, tsl, shinyei):
+	'''Collect data from sensors'''
 	    
 	while True:    
 		# Read data from the shinyei sensor.  I believe
@@ -95,5 +78,14 @@ def main():
 
 if __name__ == '__main__':
 	GPIO.setmode(GPIO.BCM)
-	main()
-	GPIO.cleanup()	    
+	# Initialize sensors
+	try:
+		bme = BME280()
+		tsl = TSL2561()
+		shinyei = Shinyei(18)
+	except Exception as e:
+		print e
+		exit()
+
+	main(bme, tsl, shinyei)
+	

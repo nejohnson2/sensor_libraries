@@ -91,10 +91,19 @@ class BME280(object):
             self.address = BME280_I2CADDR
 
         self.i2c = Adafruit_I2C(self.address)
+        self._begin()
+
         # Load calibration values.
         self._load_calibration()
         self.i2c.write8(BME280_REGISTER_CONTROL, 0x3F)
         self.t_fine = 0.0
+    
+    def _begin(self):
+        '''Make sure we're connected'''
+        x = self.i2c.readU8(BME280_REGISTER_CHIPID)
+        
+        if x == -1:
+            raise Exception('BME280 not found!')
 
     def _load_calibration(self):
 
