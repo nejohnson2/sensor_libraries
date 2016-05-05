@@ -102,7 +102,8 @@ class Shinyei(object):
 
 if __name__ == '__main__':
 	GPIO.setmode(GPIO.BCM)
-	t = Shinyei(18)
+	print "Reading Shinyei: "
+	t = Shinyei(18) # which GPIO pin
 	while True:
 		print t.read(30)
 

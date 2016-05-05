@@ -30,6 +30,7 @@ import time
 from BME280 import BME280
 from ShinyeiPPD42 import Shinyei
 from TSL2561 import TSL2561
+import requests
 
 __author__ = "Nicholas Johnson <nejohnson2@gmail.com>"
 __copyright__ = "Copyright (C) 2016 Nicholas Johnson"
@@ -49,6 +50,11 @@ def write_csv(data):
 		w.writerow(data)
 
 	f.close()
+
+def post_to_web(data):
+	url = 'http://rh-sensors.herokuapp.com/data'
+	
+	requests.post(url, json=data)
 
 def main(bme, tsl, shinyei):
 	'''Collect data from sensors'''
@@ -72,13 +78,15 @@ def main(bme, tsl, shinyei):
 		}
 
 		# write data to csv
-		write_csv(data)
+		#write_csv(data)
+		post_to_web(data)
 
 		print data
 
 if __name__ == '__main__':
 	GPIO.setmode(GPIO.BCM)
 	# Initialize sensors
+	print "Reading sensors..."
 	try:
 		bme = BME280()
 		tsl = TSL2561()
